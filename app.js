@@ -5,10 +5,15 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/user');
+const fs = require('fs');
 
 mongoose.connect('mongodb://nayan:08kitunayan@ds119651.mlab.com:19651/shop');
 
-app.use(morgan('dev'));
+app.use(morgan('dev', {
+    stream: fs.createWriteStream('./access.log', {flags: 'a'})
+}));
+//app.use(morgan('dev',{stream: accessLogStream}));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -24,8 +29,10 @@ app.use((req,res, next) => {
     }
     next();
 });
+app.use('/user',userRoutes);
 app.use('/products',productRoutes);
 app.use('/orders',orderRoutes);
+
 app.use((req, res, next) => {
     const error = new Error("API not found");
     error.status = 404;

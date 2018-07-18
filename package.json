@@ -9,8 +9,10 @@
   "author": "nayan",
   "license": "ISC",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.3",
     "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
     "mongodb": "^3.0.10",
     "mongoose": "^5.1.7",
     "morgan": "^1.9.0"

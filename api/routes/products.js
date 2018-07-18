@@ -2,14 +2,14 @@ const express = require('express');
 const route = express.Router();
 const mongoose = require('mongoose');
 const Product = require('../models/product');
-
+const checkAuth = require('../../middleware/check-auth')
 // route.get('/', (req, res, next) => {
 //     res.status(200).json({
 //         message: 'Handling Get requests'
 //     });
 // });
 
-// route.post('/', (req, res, next) => {
+// route.post('/', checkAuth, (req, res, next) => {
 //     const product = {
 //         productId: req.body.productId,
 //         productName:req.body.productName,
@@ -24,6 +24,7 @@ const Product = require('../models/product');
 // });
 
 route.get("/", (req, res, next) => {
+    console.log("hi this is logger");
     Product.find()
       .select("-_id productId productName productDesc productImg productPrice")
       .exec()
@@ -58,7 +59,8 @@ route.get("/", (req, res, next) => {
       });
   });
 
-route.post('/', (req, res, next) => {
+route.post('/', checkAuth, (req, res, next) => {
+    console.log(req);
     const product = new Product ({
         _id: new mongoose.Types.ObjectId(),
         productId: req.body.productId,
@@ -96,11 +98,6 @@ route.get('/:productId',( req, res, next) => {
         console.log(err);
         res.status(500).json({error:err});
     });
-    // console.log("id passed");
-    // res.status(200).json({
-    //     message: 'One Product get',
-    //     id:id
-    // });
 });
 
 route.post('/:productId',( req, res, next) => {
@@ -122,7 +119,7 @@ route.patch('/:productId',( req, res, next) => {
     const updateOps = {};
     for (const ops of req.body) {
         updateOps[ops.propName] = ops.value
-    }
+    }   
    Product.update({_id: id}, {$set:updateOps}).exec().then( result => {
        res.status(200).json(result);
        console.log("update result",result)
@@ -150,9 +147,9 @@ route.delete('/:productId',( req, res, next) => {
     }).catch( err => {
         console.log("Error", err);
         res.status(500).json({error:err})
-    })
+    });
     res.status(201).json({
-        message: 'updated Product',
+        message: 'Deleted Product',
         id:id
     });
 });
