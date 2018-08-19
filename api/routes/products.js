@@ -36,23 +36,12 @@ route.get("/", (req, res, next) => {
                 productName: doc.productName,
                 productPrice: doc.productPrice,
                  _id: doc._id,
-                //  request: {
-                //     type: "GET",
-                //     url: "http://localhost:3000/products/" + doc._id
-                //  }
             };
           })
         };
-        //   if (docs.length >= 0) {
         res.status(200).json(docs);
-        //   } else {
-        //       res.status(404).json({
-        //           message: 'No entries found'
-        //       });
-        //   }
       })
       .catch(err => {
-        console.log(err);
         res.status(500).json({
           error: err
         });
@@ -129,14 +118,6 @@ route.patch('/:productId',( req, res, next) => {
     });
 });
 
-// route.patch('/:productId',( req, res, next) => {
-//     const id = req.params.productId;
-//     console.log("id passed");
-//     res.status(201).json({
-//         message: 'updated Product',
-//         id:id
-//     });
-// });
 
 route.delete('/:productId',( req, res, next) => {
     const id = req.params.productId;

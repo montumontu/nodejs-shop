@@ -13,8 +13,11 @@ mongoose.connect('mongodb://nayan:08kitunayan@ds119651.mlab.com:19651/shop');
 app.use(morgan('dev', {
     stream: fs.createWriteStream('./access.log', {flags: 'a'})
 }));
-//app.use(morgan('dev',{stream: accessLogStream}));
+
+// parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({extended: false}));
+
+// Implement JSON body parser
 app.use(bodyParser.json());
 
 app.use((req,res, next) => {

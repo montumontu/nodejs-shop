@@ -7,13 +7,13 @@ const jwt = require('jsonwebtoken');
 const staticvar = require('../nodemon.json');
 
 route.post('/signup', (req, res, next) => {
+    console.log("In node api sign up");
     User.find({
             email: req.body.email
         }).exec()
         .then(result => {
             if (result.length > 0) {
-                console.log(result.length+ "dfdf");
-                console.log("wdwd");
+                console.log(result.length+ "User length");
                 return res.status(200).json({
                     message: "User already exist"
                 });
@@ -24,7 +24,7 @@ route.post('/signup', (req, res, next) => {
                         return res.status(500).json({
                             error: err
                         });
-                    } else {
+                    } else { 
                         const user = new User({
                             _id: new mongoose.Types.ObjectId(),
                             email: req.body.email,
@@ -68,6 +68,9 @@ route.post('/login',(req,res,err) => {
             });
         }
         console.log(user[0].password);
+        console.log(req.body.passwd);
+        console.log(req.body.password);
+        console.log(req.body.email);
         bcrypt.compare(req.body.password, user[0].password, function(err, result) {
             if (err) {
                 return res.status(401).json({
@@ -76,17 +79,18 @@ route.post('/login',(req,res,err) => {
             }
             console.log(err+"error");
             if (result) {
+                console.log("result", result);
                 const token = jwt.sign({
                     email:user[0].email,
                     userId:user[0]._id,
                 },
                 staticvar.env.JWT_KEY,
                 {
-                    expiresIn:"1h"
+                    expiresIn:"1m"
                 }
             );
                 return res.status(200).json({
-                    message : "Auth Successful",
+                    message : "Auth Successfull",
                     token: token
                 });
             }
